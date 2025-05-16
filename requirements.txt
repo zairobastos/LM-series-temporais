@@ -1,0 +1,4 @@
+pandas==2.2.3
+numpy==2.2.5
+scipy==1.15.3
+permetrics==2.0.0

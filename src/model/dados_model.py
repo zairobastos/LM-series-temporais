@@ -43,8 +43,10 @@ class DadosModel:
       if self.data_inicio > self.data_fim:
         raise ValueError("A data de início não pode ser maior que a data de fim.")
       
-      df = dataset.query(f"date >= '{self.data_inicio}' and date <= '{self.data_fim}'")
-      df_exatos = dataset.query(f"date > '{self.data_fim}'")
+      data_inicio = self.data_inicio
+      data_fim = self.data_fim
+      df = dataset.query(f"date >= @data_inicio and date <= @data_fim")
+      df_exatos = dataset.query(f"date > @data_fim")
       return df, df_exatos
     except ValueError as e:
       print(f"[ERROR] {e}")

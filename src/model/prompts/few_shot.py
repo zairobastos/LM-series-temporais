@@ -1,4 +1,4 @@
-FEW-SHOT = """Você é um assistente de previsão de séries temporais encarregado de analisar dados de uma série temporal específica.
+FE_SHOT = """Você é um assistente de previsão de séries temporais encarregado de analisar dados de uma série temporal específica.
 
 A série temporal tem dados de {quantidade_dias} peiodo(s) consecutivos. Cada anotação da série temporal representa a incidência de um evento que ocorre a cada dia.
 

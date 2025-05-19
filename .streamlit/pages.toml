@@ -1,0 +1,16 @@
+[[pages]]
+path = "pages/home.py"
+name = "Home"
+icon = "🏠"
+
+[[pages]]
+path = "pages/historico.py"
+name = "Histórico"
+icon = "🗂️"
+url_path = "historico" 
+
+[[pages]]
+path = "pages/upload.py"
+name = "Upload"
+icon = "📤"
+url_path = "upload" 

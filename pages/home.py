@@ -1,6 +1,7 @@
 import streamlit as st
 from datetime import date
 from streamlit_option_menu import option_menu
+import os
 
 #componentes
 from src.view.header import Header
@@ -18,7 +19,10 @@ with st.sidebar:
 		""",
 		unsafe_allow_html=True
 	)
-	dataset = st.selectbox('Base de Dados', ['ETTH1', 'ETTH2'])
+
+	lista_datasets = os.listdir('data')
+
+	dataset = st.selectbox('Base de Dados', lista_datasets)
 	modelo = st.selectbox('Modelo', [
 		'deepseek-r1-distill-qwen-32b',
 		'deepseek-r1-distill-qwen-14b',
@@ -51,6 +55,8 @@ with st.sidebar:
 if confirma:
 	Header(dataset=dataset, data_fim=str(data_fim), data_inicio=str(data_inicio), modelo=modelo, periodos=periodos, tipo_prompt=tipo_prompt).header()
 	Dataset(dataset=dataset, data_inicio=str(data_inicio), data_fim=str(data_fim), qtd_periodos=periodos).exibir_dados()
+	
+
 
 else:
 	st.write('## Confirme a escolha dos parâmetros para gerar a análise.')

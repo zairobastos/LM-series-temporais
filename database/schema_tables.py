@@ -17,3 +17,11 @@ CREATE TABLE IF NOT EXISTS {table_name} (
   total_tokens_entrada INTEGER,
   total_tokens INTEGER  
 )"""
+
+TABLE_SCHEMA_DATASET = """
+CREATE TABLE IF NOT EXISTS {table_name} (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	nome_dataset TEXT NOT NULL UNIQUE,
+	coluna_data TEXT NOT NULL,
+	coluna_valor TEXT NOT NULL
+)"""

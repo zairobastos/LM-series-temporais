@@ -19,18 +19,9 @@ class Dataset:
 		self.qtd_periodos = qtd_periodos*24
 
 	def exibir_dados(self):
-		if self.dataset == 'ETTH1':
-			dataset = DadosModel(dataset='/home/insightlab-tce/Documentos/LM-series-temporais/data/etth1_copy.csv', data_inicio=self.data_inicio, data_fim=self.data_fim, qtd_periodos=self.qtd_periodos)
-			df_selecionado, df_exatos = dataset.selecao_periodo()
-			st.write("## Dados Selecionados")
-			st.dataframe(df_selecionado, use_container_width=True)
-			st.write("## Dados Exatos")
-			st.dataframe(df_exatos, use_container_width=True)
-		elif self.dataset == 'ETTH2':
-			dataset = DadosModel(dataset='../../data/etth2_copy.csv', data_inicio=self.data_inicio, data_fim=self.data_fim, qtd_periodos=self.qtd_periodos)
-			df_selecionado, df_exatos = dataset.selecao_periodo()
-			st.write("## Dados Selecionados")
-			st.dataframe(df_selecionado, use_container_width=True)
-			st.write("## Dados Exatos")
-			st.dataframe(df_exatos, use_container_width=True)
-			
+		dataset = DadosModel(dataset=self.dataset, data_inicio=self.data_inicio, data_fim=self.data_fim, qtd_periodos=self.qtd_periodos)
+		df_selecionado, df_exatos = dataset.selecao_periodo()
+		st.write("### Dados Selecionados")
+		st.dataframe(df_selecionado, use_container_width=True)
+		st.write("### Dados Exatos")
+		st.dataframe(df_exatos, use_container_width=True)

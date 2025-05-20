@@ -16,25 +16,33 @@ st.write("## Upload do Arquivo")
 uploaded_file = st.file_uploader("Escolha um arquivo CSV", type="csv")
 
 @st.dialog("Seleção de coluna")
-def selecao_coluna(dataset):
-		lista_colunas = dataset.columns.tolist()
-		data = st.selectbox("Selecione a coluna para a data:", lista_colunas)
-		valor = st.selectbox("Selecione a coluna de valores:", lista_colunas)
+def selecao_coluna(dataset, uploaded_file):
+	lista_colunas = dataset.columns.tolist()
+	data = st.selectbox("Selecione a coluna para a data:", lista_colunas)
+	valor = st.selectbox("Selecione a coluna de valores:", lista_colunas)
 
-		if data == valor:
-				st.warning("As colunas devem ser diferentes.")
+	if data == valor:
+		st.warning("As colunas devem ser diferentes.")
 
-		if st.button("Confirmar"):
-				st.session_state.selecao_coluna = {"data": data, "valor": valor}
-				st.session_state.arquivo_selecionado = uploaded_file.name  # salva nome do arquivo
-				st.rerun()
+	if st.button("Confirmar"):
+		st.session_state.selecao_coluna = {"data": data, "valor": valor}
+		st.session_state.arquivo_selecionado = uploaded_file.name  # salva nome do arquivo
+
+		# Salvar o arquivo na pasta 'data' somente após confirmar
+		file_path = f"data/{uploaded_file.name}"
+		if not os.path.isfile(file_path):
+			df = dataset[[data,valor]]
+			df.to_csv(file_path, index=False)
+			st.success(f"Arquivo salvo em '{file_path}'", icon="✅")
+		else:
+			st.warning(f"Arquivo já existe em '{file_path}'.", icon="⚠️")
+
+		st.rerun()
 
 if uploaded_file is not None:
 	try:
 		df = pd.read_csv(uploaded_file)
 		st.toast("Arquivo carregado com sucesso!", icon="✅")
-		st.write("Visualização dos dados:")
-		st.dataframe(df.head())
 
 		# Verifica se é um novo arquivo para resetar seleção
 		if (
@@ -45,17 +53,10 @@ if uploaded_file is not None:
 			st.session_state.pop("arquivo_selecionado", None)
 
 		if "selecao_coluna" not in st.session_state:
-			selecao_coluna(df)
+			selecao_coluna(df, uploaded_file)
 		else:
 			sel = st.session_state.selecao_coluna
-			st.success(f"Colunas selecionadas: 📅 {sel['data']} / 📊 {sel['valor']}", icon="✅")
-			
-		file_path = f"data/{uploaded_file.name}"
-		if not os.path.isfile(file_path):
-			df.to_csv(file_path, index=False)
-			st.success(f"Arquivo salvo em '{file_path}'", icon="✅")
-		else:
-			st.warning(f"Arquivo já existe em '{file_path}'.", icon="⚠️")
+
 	except Exception as e:
 		st.error(f"Erro ao carregar o arquivo: {e}", icon="🚨")
 

@@ -6,6 +6,7 @@ import os
 #componentes
 from src.view.header import Header
 from src.view.dataset import Dataset
+from src.view.prompt import Prompt
 
 
 with st.sidebar:
@@ -48,13 +49,15 @@ with st.sidebar:
 	data_fim = st.date_input(label='Data de término', max_value=data_max, min_value=data_min, value=date(2016, 7, 2))
 		
 	periodos = st.slider(label='Períodos', min_value=1, max_value=10, value=1, step=1)
-	tipo_prompt = st.radio(label='Prompt', options=['ZERO-SHOT', 'FEW-SHOT', 'CoT', 'CoT+Fewst'], index=0, help='Escolha o tipo de prompt a ser utilizado')
+	tipo_prompt = st.radio(label='Prompt', options=['ZERO_SHOT', 'FEW_SHOT', 'COT', 'COT_FEW'], index=0, help='Escolha o tipo de prompt a ser utilizado')
 
 	confirma = st.button(label='Gerar Análise', key='gerar_analise', help='Clique para gerar a análise de dados',type='primary', use_container_width=True)
 
 if confirma:
 	Header(dataset=dataset, data_fim=str(data_fim), data_inicio=str(data_inicio), modelo=modelo, periodos=periodos, tipo_prompt=tipo_prompt).header()
 	Dataset(dataset=dataset, data_inicio=str(data_inicio), data_fim=str(data_fim), qtd_periodos=periodos).exibir_dados()
+	print(tipo_prompt)
+	Prompt(dataset=dataset, data_inicio=str(data_inicio), data_fim=str(data_fim), qtd_periodos=periodos, tipo_prompt=tipo_prompt).prompt()
 	
 
 

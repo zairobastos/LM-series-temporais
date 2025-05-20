@@ -23,7 +23,7 @@ class Header:
 		self.tipo_prompt = tipo_prompt
 
 	def header(self):
-		st.write("## Análise dos dados")
+		st.write("### Análise dos dados")
 
 		col1, col2, col3 = st.columns(3)
 		with col1:

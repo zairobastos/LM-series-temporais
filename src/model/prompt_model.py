@@ -7,10 +7,10 @@ from prompts.few_shot import FEW_SHOT
 from prompts.cot_few import COT_FEW
 
 class PromptType(str, Enum):
-	ZERO_SHOT = 'ZERO-SHOT'
-	FEW_SHOT = 'FEW-SHOT'
+	ZERO_SHOT = 'ZERO_SHOT'
+	FEW_SHOT = 'FEW_SHOT'
 	COT = 'COT'
-	COT_FEW = 'COT-FEW'
+	COT_FEW = 'COT_FEW'
 
 class PromptModel:
 	HORAS_DIA = 24
@@ -52,9 +52,11 @@ class PromptModel:
 		}
 
 		if self.tipo_prompt == PromptType.ZERO_SHOT:
+			print(f"[INFO] Prompt ZERO-SHOT gerado com {self.tam_periodos} períodos.")
 			return ZERO_SHOT.format(**base_kwargs)
 
 		elif self.tipo_prompt == PromptType.FEW_SHOT or self.tipo_prompt == PromptType.COT_FEW:
+			print(f"[INFO] Prompt FEW-SHOT ou COT-FEW gerado com {self.tam_periodos} períodos.")
 			# Verificação se há dados suficientes
 			if len(self.lista_prompt) < 96:
 				raise ValueError("Para FEW-SHOT ou COT-FEW, lista_prompt deve conter pelo menos 96 elementos.")
@@ -73,10 +75,8 @@ class PromptModel:
 				return COT_FEW.format(**base_kwargs)
 
 		elif self.tipo_prompt == PromptType.COT:
+			print(f"[INFO] Prompt COT gerado com {self.tam_periodos} períodos.")
 			return COT.format(**base_kwargs)
 
 		else:
 			raise ValueError(f"Tipo de prompt inválido: {self.tipo_prompt}")
-
-teste = PromptModel([i for i in range(100)], PromptType.COT, 1)
-print(teste.prompt())

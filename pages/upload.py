@@ -32,6 +32,7 @@ def selecao_coluna(dataset, uploaded_file):
 		file_path = f"data/{uploaded_file.name}"
 		if not os.path.isfile(file_path):
 			df = dataset[[data,valor]]
+			df.rename(columns={data: "date", valor: "value"}, inplace=True)
 			df.to_csv(file_path, index=False)
 			st.success(f"Arquivo salvo em '{file_path}'", icon="✅")
 		else:

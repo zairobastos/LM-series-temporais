@@ -61,8 +61,8 @@ class DadosModel:
 				raise ValueError("Os dados estão vazios.")
 			
 			print(f"[INFO] Dados entre {self.data_inicio} e {self.data_fim} carregados com sucesso.")
-			dados_prompt = [round(i, 3) for i in dataset['OT'].to_list()]
-			dados_exatos = [round(i, 3) for i in df_exatos['OT'].to_list()]
+			dados_prompt = [round(i, 3) for i in dataset['value'].to_list()]
+			dados_exatos = [round(i, 3) for i in df_exatos['value'].to_list()]
 			return dados_prompt, dados_exatos
 		except ValueError as e:
 			print(f"[ERROR] {e}")

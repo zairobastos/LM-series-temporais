@@ -13,8 +13,6 @@ class PromptType(str, Enum):
 	COT_FEW = 'COT_FEW'
 
 class PromptModel:
-	HORAS_DIA = 24
-
 	def __init__(self, lista_prompt: List[Any], tipo_prompt: PromptType, tam_previsao: int):
 		"""
 		Classe responsável por gerar prompts com base em um tipo definido.
@@ -45,10 +43,10 @@ class PromptModel:
 		base_kwargs = {
 			"periodos": self.tam_periodos,
 			"inicio_previsao": self.lista_prompt[:4],
-			"saida": self.HORAS_DIA,
+			"saida": self.tam_previsao,
 			"exemplo_saida": self.lista_prompt[:24],
 			"dados_prompt": self.lista_prompt,
-			"n": self.tam_previsao * self.HORAS_DIA,
+			"n": self.tam_previsao,
 		}
 
 		if self.tipo_prompt == PromptType.ZERO_SHOT:

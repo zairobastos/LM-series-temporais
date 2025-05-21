@@ -1,5 +1,6 @@
 import lmstudio as lms 
 import re
+import time
 
 class API:
 	def __init__(self, model: str, prompt: str, temperature: float):
@@ -14,7 +15,6 @@ class API:
 		self.model = model
 		self.prompt = prompt
 		self.temperature = temperature
-		self.llm = lms.llm(self.model)
 		
 	def resposta(self):
 		"""
@@ -24,17 +24,29 @@ class API:
 			str: Resposta do modelo.
 		"""
 		try:
-			response = self.llm.respond(self.prompt, config={
+			model = lms.llm(self.model)
+			print(f"[INFO] Modelo: {model}")
+			
+			inicio = time.time()
+			response_obj = model.respond(self.prompt, config={
 				"temperature": self.temperature,
 			})
-			if 'deepseek' in self.model:
-				response = re.search(r'</think>\s*(.*)', response, re.DOTALL)
-				if response:
-					response = response.group(1).strip()
-					return response
-				else:
-					print("[ERROR] Resposta não encontrada no formato esperado.")
-				return None
+			fim = time.time()
+
+			# Verifica se o objeto tem o atributo `.text`
+			response = response_obj.text if hasattr(response_obj, 'text') else str(response_obj)
+
+			if 'deepseek-r1' in self.model:
+				resultado = re.search(r'</think>\s*(.*)', response, re.DOTALL)
+				if resultado:
+					response = resultado.group(1).strip()
+
+			print(response)
+			qtd_tokens_prompt = response_obj.stats.prompt_tokens_count if hasattr(response_obj, "stats") else 0
+			qtd_tokens_resposta = response_obj.stats.predicted_tokens_count if hasattr(response_obj, "stats") else 0
+			print(f"[INFO] Tokens Prompt: {qtd_tokens_prompt} - Tokens Resposta: {qtd_tokens_resposta} - Tempo: {fim - inicio:.2f} segundos")
+			return response, qtd_tokens_prompt, qtd_tokens_resposta, fim - inicio
+		
 		except Exception as e:
 			print(f"[ERROR] Erro ao gerar resposta: {e}")
-			return None
+			return None, None, None, None

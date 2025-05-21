@@ -2,11 +2,16 @@ import streamlit as st
 from datetime import date
 from streamlit_option_menu import option_menu
 import os
+import ast
+import re
 
 #componentes
 from src.view.header import Header
 from src.view.dataset import Dataset
 from src.view.prompt import Prompt
+from src.view.resultados import Resultados
+
+from api.api import API
 
 
 with st.sidebar:
@@ -19,9 +24,9 @@ with st.sidebar:
 		'deepseek-r1-distill-qwen-32b',
 		'deepseek-r1-distill-qwen-14b',
 		'deepseek-r1-distill-llama-8b',
-		'deepseek-r1-distill-llama-7b',
+		'deepseek-r1-distill-qwen-7b',
 		'unsloth/deepseek-r1-distill-qwen-1.5b'
-	])
+	], index=0, help='Escolha o modelo a ser utilizado. O modelo deepseek-r1-distill-qwen-32b é o mais avançado e pode fornecer melhores resultados, mas também é mais pesado e pode levar mais tempo para gerar respostas.')
 	temperatura = st.slider(label='Temperatura', min_value=0.0, max_value=1.0, value=0.7, step=0.1, help='A temperatura controla a aleatoriedade da resposta do modelo. Valores mais altos resultam em respostas mais criativas e variados.')
 	st.write('---')
 	st.write(f"#### ⚙️ Configurações do Prompt - {dataset}")
@@ -39,7 +44,9 @@ with st.sidebar:
 if confirma:
 	Header(dataset=dataset, data_fim=str(data_fim), data_inicio=str(data_inicio), modelo=modelo, periodos=periodos, tipo_prompt=tipo_prompt).header()
 	Dataset(dataset=dataset, data_inicio=str(data_inicio), data_fim=str(data_fim), qtd_periodos=periodos).exibir_dados()
-	Prompt(dataset=dataset, data_inicio=str(data_inicio), data_fim=str(data_fim), qtd_periodos=periodos, tipo_prompt=tipo_prompt).prompt()
+	prompt, lista_exato = Prompt(dataset=dataset, data_inicio=str(data_inicio), data_fim=str(data_fim), qtd_periodos=periodos, tipo_prompt=tipo_prompt).prompt()
+	resposta, qtd_tokens_prompt, qtd_tokens_predito, tempo = API(model=modelo, prompt=prompt, temperature=temperatura).resposta()
+	Resultados(val_exatos=lista_exato, val_previstos=resposta, qtd_tokens_prompt=qtd_tokens_prompt, qtd_tokens_resposta=qtd_tokens_predito, tempo=tempo).exibir_resultados()
 	
 
 

@@ -32,4 +32,5 @@ class Prompt:
 			line_numbers=True,
 		)
 		Grafico().amostragem(lista_prompt)
+		return prompt, lista_exatos
 

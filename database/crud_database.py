@@ -50,13 +50,13 @@ class Crud:
 			)
 			self.connection.commit()
 			print(f"[INFO] Dados inseridos com sucesso na tabela {table}.")
-			return True
 		except sqlite3.Error as e:
 			print(f"[ERROR] Erro ao inserir dados na tabela {table}: {e}")
 			return False
 		finally:
 			print("[INFO] Fechando conexão com o banco de dados.")
 			self.connection.close()
+			return True
 
 	def insert_dataset(self, table: str, col_data: str, col_valor: str) -> bool:
 		"""Inserir dados na tabela de dataset.

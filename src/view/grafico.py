@@ -19,7 +19,7 @@ class Grafico:
 		st.plotly_chart(fig, use_container_width=True)
 		st.write('---')
 
-	def grafico(self, dados_reais: list, dados_previstos:list, smape: float):
+	def grafico(self, dados_reais: list, dados_previstos:list, smape: float, key:int=1):
 		dados_previstos = ast.literal_eval(dados_previstos)
 		st.write('### Gráfico Série Temporal - Previsão')
 		fig = go.Figure()
@@ -33,4 +33,4 @@ class Grafico:
 			showlegend=True,
 			height=600
 		)
-		st.plotly_chart(fig, use_container_width=True)
+		st.plotly_chart(fig, use_container_width=True, key=key)

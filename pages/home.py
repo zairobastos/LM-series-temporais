@@ -23,10 +23,10 @@ with st.sidebar:
 
 	dataset = st.selectbox('Base de Dados', lista_datasets)
 	modelo = st.selectbox('Modelo', [
+		'deepseek-r1-distill-qwen-7b',
 		'deepseek-r1-distill-qwen-32b',
 		'deepseek-r1-distill-qwen-14b',
 		'deepseek-r1-distill-llama-8b',
-		'deepseek-r1-distill-qwen-7b',
 		'unsloth/deepseek-r1-distill-qwen-1.5b'
 	], index=0, help='Escolha o modelo a ser utilizado. O modelo deepseek-r1-distill-qwen-32b é o mais avançado e pode fornecer melhores resultados, mas também é mais pesado e pode levar mais tempo para gerar respostas.')
 	temperatura = st.slider(label='Temperatura', min_value=0.0, max_value=1.0, value=0.7, step=0.1, help='A temperatura controla a aleatoriedade da resposta do modelo. Valores mais altos resultam em respostas mais criativas e variados.')
@@ -49,7 +49,8 @@ if confirma:
 	prompt, lista_exato = Prompt(dataset=dataset, data_inicio=str(data_inicio), data_fim=str(data_fim), qtd_periodos=periodos, tipo_prompt=tipo_prompt).prompt()
 	resposta, qtd_tokens_prompt, qtd_tokens_predito, tempo = API(model=modelo, prompt=prompt, temperature=temperatura).resposta()
 	smape = Resultados(val_exatos=lista_exato, val_previstos=resposta, qtd_tokens_prompt=qtd_tokens_prompt, qtd_tokens_resposta=qtd_tokens_predito, tempo=tempo).exibir_resultados()
-	Crud().insert(
+	print("aqui pra ver")
+	confirme_insert = Crud().insert(
 		table=dataset[:-4],
 		data_inicio=data_inicio, 
 		data_fim=data_fim, 
@@ -65,6 +66,11 @@ if confirma:
 		total_tokens_prompt=qtd_tokens_prompt, 
 		total_tokens=qtd_tokens_predito+qtd_tokens_prompt
 	)
+	if confirme_insert:
+		st.toast("Análise gerada com sucesso!", icon="✅")
+	else:
+		st.toast("Erro ao gerar a análise.", icon="🚨")
+	print("tá passando direto pq")
 
 
 else:

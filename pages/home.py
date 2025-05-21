@@ -11,6 +11,8 @@ from src.view.dataset import Dataset
 from src.view.prompt import Prompt
 from src.view.resultados import Resultados
 
+#Banco de dados e API
+from database.crud_database import Crud
 from api.api import API
 
 
@@ -46,8 +48,23 @@ if confirma:
 	Dataset(dataset=dataset, data_inicio=str(data_inicio), data_fim=str(data_fim), qtd_periodos=periodos).exibir_dados()
 	prompt, lista_exato = Prompt(dataset=dataset, data_inicio=str(data_inicio), data_fim=str(data_fim), qtd_periodos=periodos, tipo_prompt=tipo_prompt).prompt()
 	resposta, qtd_tokens_prompt, qtd_tokens_predito, tempo = API(model=modelo, prompt=prompt, temperature=temperatura).resposta()
-	Resultados(val_exatos=lista_exato, val_previstos=resposta, qtd_tokens_prompt=qtd_tokens_prompt, qtd_tokens_resposta=qtd_tokens_predito, tempo=tempo).exibir_resultados()
-	
+	smape = Resultados(val_exatos=lista_exato, val_previstos=resposta, qtd_tokens_prompt=qtd_tokens_prompt, qtd_tokens_resposta=qtd_tokens_predito, tempo=tempo).exibir_resultados()
+	Crud().insert(
+		table=dataset[:-4],
+		data_inicio=data_inicio, 
+		data_fim=data_fim, 
+		periodos=periodos,
+		modelo=modelo,
+		temperatura_modelo=temperatura,
+		prompt=prompt,
+		tipo_prompt=tipo_prompt, 
+		valores_exatos=str(lista_exato), 
+		valores_previstos=str(resposta), 
+		smape=smape, 
+		total_tokens_resposta=qtd_tokens_predito, 
+		total_tokens_prompt=qtd_tokens_prompt, 
+		total_tokens=qtd_tokens_predito+qtd_tokens_prompt
+	)
 
 
 else:

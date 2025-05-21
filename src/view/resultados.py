@@ -47,3 +47,4 @@ class Resultados:
 			line_numbers=True,
 		)
 		Grafico().grafico(self.val_exatos, self.val_previstos, smape)
+		return smape

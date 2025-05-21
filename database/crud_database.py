@@ -18,7 +18,7 @@ class Crud:
 			valores_para_inserir = (
 				kwargs.get('data_inicio'),
 				kwargs.get('data_fim'),
-				kwargs.get('horas'),
+				kwargs.get('periodos'),
 				kwargs.get('modelo'),
 				kwargs.get('temperatura_modelo'),
 				kwargs.get('prompt'),
@@ -26,10 +26,8 @@ class Crud:
 				kwargs.get('valores_exatos'),
 				kwargs.get('valores_previstos'),
 				kwargs.get('smape'),
-				kwargs.get('top_k'),
-				kwargs.get('max_tokens'),
-				kwargs.get('total_tokens_saida'),
-				kwargs.get('total_tokens_entrada'),
+				kwargs.get('total_tokens_resposta'),
+				kwargs.get('total_tokens_prompt'),
 				kwargs.get('total_tokens')
 			)
 			self.cursor.execute(
@@ -37,7 +35,7 @@ class Crud:
 				INSERT INTO  {table}(
 					data_inicio,
 					data_fim,
-					horas,
+					periodos,
 					modelo,
 					temperatura_modelo,
 					prompt,
@@ -45,12 +43,10 @@ class Crud:
 					valores_exatos,
 					valores_previstos,
 					smape,
-					top_k,
-					max_tokens,
-					total_tokens_saida,
-					total_tokens_entrada,
+					total_tokens_resposta,
+					total_tokens_prompt,
 					total_tokens
-				) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""", valores_para_inserir
+				) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""", valores_para_inserir
 			)
 			self.connection.commit()
 			print(f"[INFO] Dados inseridos com sucesso na tabela {table}.")

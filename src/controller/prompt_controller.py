@@ -1,6 +1,6 @@
 import pandas as pd 
-from model.dados_model import DadosModel
-from model.prompt_model import PromptModel
+from src.model.dados_model import DadosModel
+from src.model.prompt_model import PromptModel
 
 class PromptController:
   def __init__(self, dataset_prompt: str, data_inicio:str, data_fim:str):

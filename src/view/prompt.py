@@ -1,5 +1,5 @@
 import streamlit as st
-from model.prompt_model import PromptModel, PromptType
+from src.model.prompt_model import PromptModel, PromptType
 from src.model.dados_model import DadosModel
 from src.view.grafico import Grafico
 

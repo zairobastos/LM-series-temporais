@@ -1,10 +1,10 @@
 from typing import Any, List, Literal
 from enum import Enum
 
-from prompts.zero_shot import ZERO_SHOT
-from prompts.cot import COT
-from prompts.few_shot import FEW_SHOT
-from prompts.cot_few import COT_FEW
+from src.prompts.zero_shot import ZERO_SHOT
+from src.prompts.cot import COT
+from src.prompts.few_shot import FEW_SHOT
+from src.prompts.cot_few import COT_FEW
 
 class PromptType(str, Enum):
 	ZERO_SHOT = 'ZERO_SHOT'

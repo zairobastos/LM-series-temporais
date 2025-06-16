@@ -9,6 +9,12 @@ with st.sidebar:
 	lista_datasets = os.listdir('data')
 
 	dataset = st.selectbox('Base de Dados', lista_datasets)
+	prompts = st.selectbox('Prompt', [
+	'ZERO_SHOT',
+	'FEW_SHOT',
+	'COT',
+	'COT_FEW'
+	], index=0)
 
 	confirma = st.button(label='Visualizar Previsões', help='Clique para gerar a análise de dados',type='primary', use_container_width=True)
 	
@@ -104,15 +110,15 @@ if confirma:
 					</tr>
 					<tr>
 						<td>Quantidade de Tokens do Prompt</td>
-						<td>{str(dado[12])}</td>
+						<td>{str(dado[14])}</td>
 					</tr>
 					<tr>
 						<td>Quantidade de tokens da Resposta</td>
-						<td>{str(dado[11])}</td>
+						<td>{str(dado[13])}</td>
 					</tr>
 					<tr>
 						<td>Total de Tokens</td>
-						<td>{str(dado[13])}</td>
+						<td>{str(dado[15])}</td>
 					</tr>
 					<tr>
 						<th colspan="2" class="centered">Resultados da Consulta</th>
@@ -120,6 +126,14 @@ if confirma:
 					<tr>
 						<td>SMAPE</td>
 						<td>{dado[10]}</td>
+					</tr>
+					<tr>
+						<td>MAE</td>
+						<td>{dado[11]}</td>
+					</tr>
+					<tr>
+						<td>RMSE</td>
+						<td>{dado[12]}</td>
 					</tr>
 					<tr>
 						<td>Valores Previstos</td>

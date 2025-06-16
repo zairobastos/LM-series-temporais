@@ -1,7 +1,7 @@
 [[pages]]
 path = "pages/home.py"
-name = "Home"
-icon = "🏠"
+name = "Previsões"
+icon = "📊"
 
 [[pages]]
 path = "pages/historico.py"

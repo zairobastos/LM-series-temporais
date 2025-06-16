@@ -26,6 +26,8 @@ class Crud:
 				kwargs.get('valores_exatos'),
 				kwargs.get('valores_previstos'),
 				kwargs.get('smape'),
+				kwargs.get('mae'),
+				kwargs.get('rmse'),
 				kwargs.get('total_tokens_resposta'),
 				kwargs.get('total_tokens_prompt'),
 				kwargs.get('total_tokens')
@@ -43,10 +45,12 @@ class Crud:
 					valores_exatos,
 					valores_previstos,
 					smape,
+					mae,
+					rmse,
 					total_tokens_resposta,
 					total_tokens_prompt,
 					total_tokens
-				) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""", valores_para_inserir
+				) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""", valores_para_inserir
 			)
 			self.connection.commit()
 			print(f"[INFO] Dados inseridos com sucesso na tabela {table}.")

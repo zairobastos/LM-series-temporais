@@ -1,4 +1,8 @@
 import streamlit as st
+from dotenv import set_key
+import os
+
+ENV_PATH = ".env"
 
 # Inicializa o estado se ainda não estiver definido
 if "modo" not in st.session_state:
@@ -64,9 +68,20 @@ elif st.session_state.modo == "api":
 		type="primary",
 	)
 	if chave_api and modelo_api and salvar:
-		st.toast(
-			"Configurações salvas com sucesso! Você pode utilizar a API com o modelo selecionado.",
-			icon="✅"
+		key_name = f'{modelo_api}_key'.replace("-", "_").replace(".", "_")
+		try:
+			if not os.path.exists(ENV_PATH):
+				with open(ENV_PATH, 'w') as f:
+					f.write("")
+			set_key(ENV_PATH, key_name,chave_api)
+			st.toast(
+				"Configurações salvas com sucesso! Você pode utilizar a API com o modelo selecionado.",
+				icon="✅"
+			)
+		except Exception as e:
+			st.toast(
+			f"Erro ao salvar as configurações: {e}",
+			icon="❌"
 		)
 	elif salvar  and (not chave_api or not modelo_api):
 		st.toast(

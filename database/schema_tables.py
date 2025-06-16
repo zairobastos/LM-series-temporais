@@ -11,7 +11,9 @@ CREATE TABLE IF NOT EXISTS {table_name} (
   valores_exatos TEXT,
   valores_previstos TEXT,
   smape REAL,
+	mae REAL,
+	rmse REAL,
   total_tokens_resposta INTEGER,
   total_tokens_prompt INTEGER,
-  total_tokens INTEGER  
+  total_tokens INTEGER 
 )"""

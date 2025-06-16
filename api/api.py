@@ -1,6 +1,11 @@
 import lmstudio as lms 
 import re
 import time
+from openai import OpenAI
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class API:
 	def __init__(self, model: str, prompt: str, temperature: float):
@@ -47,6 +52,37 @@ class API:
 			print(f"[INFO] Tokens Prompt: {qtd_tokens_prompt} - Tokens Resposta: {qtd_tokens_resposta} - Tempo: {fim - inicio:.2f} segundos")
 			return response, qtd_tokens_prompt, qtd_tokens_resposta, fim - inicio
 		
+		except Exception as e:
+			print(f"[ERROR] Erro ao gerar resposta: {e}")
+			return None, None, None, None
+
+	def resposta_openai(self) -> tuple[str, int, int, float]:
+		"""	Gera a resposta do modelo OpenAI com base no prompt e temperatura definidos.
+
+		Returns:
+				str, int, int, float:  Resposta do modelo, quantidade de tokens do prompt, quantidade de tokens da resposta e tempo de execução.
+		"""
+		print(f"[INFO] Usando modelo OpenAI: {self.model}")
+		api_key = os.getenv(f'{self.model}_key')
+		print(f"[INFO] Usando chave da API: {api_key}")
+
+		client = OpenAI(
+			api_key=api_key
+		)
+
+		try:
+			inicio = time.time()
+			response = client.chat.completions.create(
+				model='gpt-4.1',
+				messages=[{"role": "user", "content": self.prompt}],
+				temperature=self.temperature,
+			)
+			fim = time.time()
+			print(f"[INFO] Resposta: {response.choices[0].message.content}")
+			qtd_tokens_prompt = response.usage.prompt_tokens
+			qtd_tokens_resposta = response.usage.completion_tokens
+			print(f"[INFO] Tokens Prompt: {qtd_tokens_prompt} - Tokens Resposta: {qtd_tokens_resposta} - Tempo: {fim - inicio:.2f} segundos")
+			return response.choices[0].message.content, qtd_tokens_prompt, qtd_tokens_resposta, fim - inicio
 		except Exception as e:
 			print(f"[ERROR] Erro ao gerar resposta: {e}")
 			return None, None, None, None

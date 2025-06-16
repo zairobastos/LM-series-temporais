@@ -39,7 +39,9 @@ class Metricas:
 		Returns:
 			float: Erro médio absoluto.
 		"""
-		mae = np.mean(np.abs(self.y_true - self.y_pred))
+		y_true = np.array(self.y_true)
+		y_pred = np.array(self.y_pred)
+		mae = np.mean(np.abs(y_true - y_pred))
 		return round(mae, 4)
 
 	def rmse(self) -> float:
@@ -47,5 +49,7 @@ class Metricas:
 		Returns:
 			float: Raiz do erro quadrático médio.
 		"""
-		rmse = np.sqrt(np.mean((self.y_true - self.y_pred) ** 2))
+		y_true = np.array(self.y_true)
+		y_pred = np.array(self.y_pred)
+		rmse = np.sqrt(np.mean((y_true - y_pred) ** 2))
 		return round(rmse, 4)

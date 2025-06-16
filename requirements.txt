@@ -7,3 +7,5 @@ plotly==6.1.0
 lmstudio==1.3.0
 st-pages==1.0.1
 streamlit-option-menu==0.4.0
+openai==1.86.0
+python-dotenv==1.1.0

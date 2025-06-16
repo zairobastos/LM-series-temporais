@@ -16,14 +16,15 @@ class DadosModel:
 		self.data_inicio = data_inicio
 		self.data_fim = data_fim 
 		self.qtd_periodos = qtd_periodos
-
-		self.caminho = '/home/insightlab-tce/Documentos/LM-series-temporais/data/'+self.dataset
+		diretorio_do_script = Path(__file__).resolve().parent
+		self.caminho =  diretorio_do_script.parent.parent / 'data' / self.dataset
 
 	def exibir_dados(self) -> pd.DataFrame:
 		"""Carrega o dataset do arquivo CSV."""
 		try:
 			print(f"[INFO] Lendo dados do caminho: {self.caminho}")
 			dataset = pd.read_csv(self.caminho)
+			print(f"[INFO] Dados carregados com sucesso do arquivo: {self.caminho}")
 			return dataset
 		except FileNotFoundError as e:
 			print(f"[ERROR] Arquivo não encontrado: {e}")

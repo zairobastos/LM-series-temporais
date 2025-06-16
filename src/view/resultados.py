@@ -22,16 +22,26 @@ class Resultados:
 		self.tempo = tempo
 
 	def exibir_resultados(self):
-		col1, col2, col3, col4 = st.columns(4)
+		col1, col2, col3 = st.columns(3)
 		with col1:
 			st.metric(label='Tokens Prompt', value=self.qtd_tokens_prompt)
 		with col2:
 			st.metric(label='Tokens Resposta', value=self.qtd_tokens_resposta)
 		with col3:
 			st.metric(label='Tempo de Execução', value=f"{self.tempo:.2f} segundos")
+
+		col4, col5, col6 = st.columns(3)
 		with col4:
+			print(self.val_previstos)
+			print(type(self.val_previstos))
 			smape = Metricas(y_pred=ast.literal_eval(self.val_previstos), y_true=self.val_exatos).smape()
 			st.metric(label='SMAPE', value=smape)
+		with col5:
+			mae = Metricas(y_pred=ast.literal_eval(self.val_previstos), y_true=self.val_exatos).mae()
+			st.metric(label='MAE', value=mae)
+		with col6:
+			rmse = Metricas(y_pred=ast.literal_eval(self.val_previstos), y_true=self.val_exatos).rmse()
+			st.metric(label='RMSE', value=rmse)
 		st.write('---')
 		st.write('### Resultados')
 		st.write("Valores Exatos")
@@ -47,4 +57,4 @@ class Resultados:
 			line_numbers=True,
 		)
 		Grafico().grafico(self.val_exatos, self.val_previstos, smape)
-		return smape
+		return smape, mae, rmse

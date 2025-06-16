@@ -1,7 +1,7 @@
 import streamlit as st
 
 class Header:
-	def __init__(self, dataset:str, modelo:str, data_inicio:str, data_fim:str, periodos:int, tipo_prompt: str):
+	def __init__(self, dataset:str, modelo:str, data_inicio:str, data_fim:str, periodos:int, tipo_prompt: str, tipo_serie: str ):
 		"""
 		Classe responsável por criar o cabeçalho da aplicação.
 		Esta classe é utilizada para definir os parâmetros de entrada do usuário, como o dataset, modelo, datas de início e fim,
@@ -21,19 +21,22 @@ class Header:
 		self.data_fim = data_fim
 		self.periodos = periodos
 		self.tipo_prompt = tipo_prompt
+		self.tipo_serie = tipo_serie
 
 	def header(self):
 		st.write("### Análise dos dados")
 
-		col1, col2, col3 = st.columns(3)
+		col1, col2, col3, col4 = st.columns(4)
 		with col1:
 			st.metric(label="Base de Dados", value=self.dataset)
 		with col2:
 			st.metric(label="Modelo", value=self.modelo)
 		with col3:
 			st.metric(label="Tipo de Prompt", value=self.tipo_prompt)
+		with col4:
+			st.metric(label="Tipo de Série Temporal", value=self.tipo_serie)
 
-		col4, col5, col6 = st.columns(3)
+		col4, col5, col6, col7 = st.columns(4)
 		with col4:
 			st.metric(label="Data de Início", value=self.data_inicio)
 		with col5:

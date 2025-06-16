@@ -15,8 +15,8 @@ date,value
 st.write("## Upload do Arquivo")
 uploaded_file = st.file_uploader("Escolha um arquivo CSV", type="csv")
 
-@st.dialog("Seleção de coluna")
-def selecao_coluna(dataset, uploaded_file):
+@st.dialog("Seleção e Tratamento de Dados")
+def configuracao_dataset(dataset, uploaded_file):
 	lista_colunas = dataset.columns.tolist()
 	data = st.selectbox("Selecione a coluna para a data:", lista_colunas)
 	valor = st.selectbox("Selecione a coluna de valores:", lista_colunas)
@@ -24,15 +24,31 @@ def selecao_coluna(dataset, uploaded_file):
 	if data == valor:
 		st.warning("As colunas devem ser diferentes.")
 
+	tratamento = st.radio(
+		"O que fazer com valores duplicados?",
+		("Manter o primeiro", "Manter o último", "Somar valores duplicados"),
+		key="tratamento_duplicados"
+	)
+
 	if st.button("Confirmar"):
 		st.session_state.selecao_coluna = {"data": data, "valor": valor}
-		st.session_state.arquivo_selecionado = uploaded_file.name  # salva nome do arquivo
+		st.session_state.arquivo_selecionado = uploaded_file.name
+		st.session_state.tratamento = tratamento
 
-		# Salvar o arquivo na pasta 'data' somente após confirmar
+		# Aplicar tratamento
+		df = dataset[[data, valor]].copy()
+		df.rename(columns={data: "date", valor: "value"}, inplace=True)
+
+		if tratamento == "Manter o primeiro":
+			df = df.drop_duplicates(subset="date", keep="first")
+		elif tratamento == "Manter o último":
+			df = df.drop_duplicates(subset="date", keep="last")
+		elif tratamento == "Somar valores duplicados":
+			df = df.groupby("date", as_index=False).sum()
+
+		# Salvar
 		file_path = f"data/{uploaded_file.name}"
 		if not os.path.isfile(file_path):
-			df = dataset[[data,valor]]
-			df.rename(columns={data: "date", valor: "value"}, inplace=True)
 			df.to_csv(file_path, index=False)
 			st.success(f"Arquivo salvo em '{file_path}'", icon="✅")
 		else:
@@ -45,25 +61,27 @@ if uploaded_file is not None:
 		df = pd.read_csv(uploaded_file)
 		st.toast("Arquivo carregado com sucesso!", icon="✅")
 
-		# Verifica se é um novo arquivo para resetar seleção
+		# Resetar seleção caso novo arquivo
 		if (
 			"arquivo_selecionado" in st.session_state
 			and st.session_state.arquivo_selecionado != uploaded_file.name
 		):
 			st.session_state.pop("selecao_coluna", None)
 			st.session_state.pop("arquivo_selecionado", None)
+			st.session_state.pop("tratamento", None)
 
 		if "selecao_coluna" not in st.session_state:
-			selecao_coluna(df, uploaded_file)
+			configuracao_dataset(df, uploaded_file)
 		else:
 			sel = st.session_state.selecao_coluna
+			st.success(f"Colunas selecionadas: data = {sel['data']}, valor = {sel['valor']}")
+			st.info(f"Tratamento aplicado: {st.session_state.tratamento}")
 
 	except Exception as e:
 		st.error(f"Erro ao carregar o arquivo: {e}", icon="🚨")
 
-		
 # Diálogo de confirmação
-@st.dialog(f"Exclusão do dataset")
+@st.dialog("Exclusão do dataset")
 def confirmar_remocao(dataset):
 	opcao = st.radio(f'Deseja realmente excluir o {dataset}:', ("Sim", "Não"))
 	if st.button("Confirmar Exclusão"):
@@ -81,14 +99,13 @@ def confirmar_remocao(dataset):
 # Sidebar
 with st.sidebar:
 	st.write("## Datasets Disponíveis")
-	lista_datasets = os.listdir("data")
+	lista_datasets = os.listdir("data") if os.path.exists("data") else []
 	if lista_datasets:
 		for dataset in lista_datasets:
 			st.write(f"📊 {dataset.upper()}")
 		st.write("## Remover um dataset:")
-		dataset_remover = st.selectbox("Escolha um dataset para remover:", lista_datasets if lista_datasets else ["Nenhum disponível"])
-		if lista_datasets and st.button("Remover Dataset"):
+		dataset_remover = st.selectbox("Escolha um dataset para remover:", lista_datasets)
+		if st.button("Remover Dataset"):
 			confirmar_remocao(dataset_remover)
 	else:
 		st.write("Nenhum dataset disponível.")
-

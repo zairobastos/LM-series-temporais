@@ -14,3 +14,9 @@ path = "pages/upload.py"
 name = "Upload"
 icon = "📤"
 url_path = "upload" 
+
+[[pages]]
+path = "pages/configuracoes.py"
+name = "Configurações"
+icon = "⚙️"
+url_path = "configuracoes"

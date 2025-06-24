@@ -71,3 +71,30 @@ class DadosModel:
 		except Exception as e:
 			print(f"[ERROR] Ocorreu um erro inesperado: {e}")
 			return None, None
+		
+	def dados_prompt_str(self) -> tuple[str, list[float], list[float]]:
+		"""	Retorna os dados do período selecionado e os valores exatos a prever como string e lista de floats.
+
+		Returns:
+				tuple[str, list[float]]: 
+			- str: Dados do período selecionado como string.
+			- list[float]: Valores exatos a prever como lista de floats.
+		"""
+		try:
+			dataset, df_exatos = self.selecao_periodo()
+			if dataset is None or df_exatos is None:
+				raise ValueError("Os dados não foram carregados corretamente.")
+			if dataset.empty or df_exatos.empty:
+				raise ValueError("Os dados estão vazios.")
+			
+			print(f"[INFO] Dados entre {self.data_inicio} e {self.data_fim} carregados com sucesso.")
+			dados_prompt = [round(i, 3) for i in dataset['value'].to_list()]
+			dados_exatos = [round(i, 3) for i in df_exatos['value'].to_list()]
+			dados_prompt_str = ', '.join(' '.join(char for char in str(num)) for num in dados_prompt)
+			return dados_prompt_str, dados_prompt, dados_exatos
+		except ValueError as e:
+			print(f"[ERROR] {e}")
+			return None, None, None
+		except Exception as e:
+			print(f"[ERROR] Ocorreu um erro inesperado: {e}")
+			return None, None, None

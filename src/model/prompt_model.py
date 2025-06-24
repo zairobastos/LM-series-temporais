@@ -22,8 +22,6 @@ class PromptModel:
 			tipo_prompt (PromptType): Tipo de prompt a ser utilizado.
 			tam_previsao (int): Número de dias a serem previstos.
 		"""
-		if not isinstance(lista_prompt, list) or len(lista_prompt) == 0:
-			raise ValueError("lista_prompt deve ser uma lista não vazia.")
 			
 		if not isinstance(tam_previsao, int) or tam_previsao <= 0:
 			raise ValueError("tam_previsao deve ser um inteiro positivo.")

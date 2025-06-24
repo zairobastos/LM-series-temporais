@@ -1,4 +1,5 @@
 __*
 data/
 .env
-dababase.db
+database
+.streamlit/

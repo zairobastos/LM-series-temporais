@@ -1,5 +1,4 @@
 __*
 data/
-.env
 database
-.streamlit/
+*.env

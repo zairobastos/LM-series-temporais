@@ -5,7 +5,7 @@ class Crud:
 		self.connection = sqlite3.connect('./database/database.db')
 		self.cursor = self.connection.cursor()
 
-	def insert(self, table: str, **kwargs) -> bool:
+	def insert(self, **kwargs) -> bool:
 		"""Inserir dados na tabela especificada.
 		Args:
 			table (str): Nome da tabela onde os dados serão inseridos.
@@ -35,7 +35,7 @@ class Crud:
 			)
 			self.cursor.execute(
 				f"""
-				INSERT INTO  {table}(
+				INSERT INTO llm4time (
 					data_inicio,
 					data_fim,
 					periodos,
@@ -55,9 +55,9 @@ class Crud:
 				) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""", valores_para_inserir
 			)
 			self.connection.commit()
-			print(f"[INFO] Dados inseridos com sucesso na tabela {table}.")
+			print(f"[INFO] Dados inseridos com sucesso na tabela llm4time.")
 		except sqlite3.Error as e:
-			print(f"[ERROR] Erro ao inserir dados na tabela {table}: {e}")
+			print(f"[ERROR] Erro ao inserir dados na tabela llm4time: {e}")
 			return False
 		finally:
 			print("[INFO] Fechando conexão com o banco de dados.")
@@ -94,22 +94,29 @@ class Crud:
 			self.connection.close()
 		
 
-	def select(self, table: str, **kwargs) -> list:
-		"""Selecionar dados da tabela especificada.
+	def select(self, table: str, tipo_prompt: list[str]) -> list:
+		"""
+		Seleciona dados da tabela 'llm4time' com base na base_dados e na lista de tipo_prompt.
+
 		Args:
-			table (str): Nome da tabela de onde os dados serão selecionados.
-			**kwargs: Condições para a seleção dos dados.
+			table (str): Nome da base de dados (base_dados).
+			tipo_prompt (list[str]): Lista de tipos de prompt a serem filtrados.
 
 		Returns:
 			list: Lista de tuplas com os dados selecionados.
 		"""
 		try:
-			query = f"SELECT * FROM {table}"
-			self.cursor.execute(query)
+			placeholders = ','.join(['?'] * len(tipo_prompt))
+			query = f"SELECT * FROM llm4time WHERE base_dados = ? AND tipo_prompt IN ({placeholders})"
+			
+			# Junta o valor da base com a lista de tipos
+			params = [table] + tipo_prompt
+			
+			self.cursor.execute(query, params)
 			rows = self.cursor.fetchall()
 			return rows
 		except sqlite3.Error as e:
-			print(f"[ERROR] Erro ao selecionar dados da tabela {table}: {e}")
+			print(f"[ERROR] Erro ao selecionar dados da tabela llm4time: {e}")
 			return []
 		finally:
 			print("[INFO] Fechando conexão com o banco de dados.")

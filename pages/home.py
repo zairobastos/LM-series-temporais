@@ -53,7 +53,6 @@ if confirma:
 	smape, mae, rmse = Resultados(val_exatos=lista_exato, val_previstos=resposta, qtd_tokens_prompt=qtd_tokens_prompt, qtd_tokens_resposta=qtd_tokens_predito, tempo=tempo).exibir_resultados()
 
 	confirme_insert = Crud().insert(
-		table=dataset[:-4],
 		data_inicio=data_inicio, 
 		data_fim=data_fim, 
 		periodos=periodos,
@@ -68,7 +67,8 @@ if confirma:
 		rmse=rmse,
 		total_tokens_resposta=qtd_tokens_predito, 
 		total_tokens_prompt=qtd_tokens_prompt, 
-		total_tokens=qtd_tokens_predito+qtd_tokens_prompt
+		total_tokens=qtd_tokens_predito+qtd_tokens_prompt,
+		base_dados= dataset
 	)
 	if confirme_insert:
 		st.toast("Análise gerada com sucesso!", icon="✅")

@@ -9,19 +9,19 @@ with st.sidebar:
 	lista_datasets = os.listdir('data')
 
 	dataset = st.selectbox('Base de Dados', lista_datasets)
-	prompts = st.selectbox('Prompt', [
-	'ZERO_SHOT',
-	'FEW_SHOT',
-	'COT',
-	'COT_FEW'
-	], index=0)
+	prompts = st.multiselect(label='Tipo de Prompt', 
+		options=['ZERO_SHOT', 'FEW_SHOT', 'COT', 'COT_FEW'], 
+		default=['ZERO_SHOT'], 
+		help='Selecione os tipos de prompts que deseja visualizar. Você pode selecionar mais de um tipo de prompt para comparar os resultados.'
+	)
 
 	confirma = st.button(label='Visualizar Previsões', help='Clique para gerar a análise de dados',type='primary', use_container_width=True)
 	
 
-if confirma:
+if confirma and prompts!= []:
 	dados = Crud().select(
-		table=dataset[:-4]
+		table=dataset,
+		tipo_prompt=prompts
 	)
 	c=1
 	for dado in dados:
@@ -147,5 +147,6 @@ if confirma:
 		st.code(dado[6], language='python', line_numbers=True)
 		c+=1
 		st.write('---')
-		
+elif confirma and prompts == []:
+	st.warning("Por favor, selecione pelo menos um tipo de prompt para visualizar as previsões.")
 

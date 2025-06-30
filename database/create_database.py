@@ -1,7 +1,7 @@
 import sqlite3
 from contextlib import closing
 from sqlite3 import Cursor, Connection
-from schema_tables import TABLE_SCHEMA_ETTH
+from schema_tables import TABLE_SCHEMA
 
 
 def create_table(cursor: Cursor, table_name: str) -> None:
@@ -14,7 +14,7 @@ def create_table(cursor: Cursor, table_name: str) -> None:
 	"""
 	try:
 		print(f"[INFO] Criando a tabela '{table_name}'...")
-		cursor.execute(TABLE_SCHEMA_ETTH.format(table_name=table_name))
+		cursor.execute(TABLE_SCHEMA.format(table_name=table_name))
 		print(f"[SUCCESS] Tabela '{table_name}' criada com sucesso.")
 	except sqlite3.Error as e:
 		print(f"[ERROR] Falha ao criar a tabela '{table_name}': {e}")

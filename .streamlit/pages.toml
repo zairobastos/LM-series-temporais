@@ -20,3 +20,9 @@ path = "pages/configuracoes.py"
 name = "Configurações"
 icon = "⚙️"
 url_path = "configuracoes"
+
+[[pages]]
+path = "pages/benchmark.py"
+name = "Benchmark"
+icon = "🥇"
+url_path = "benchmark"

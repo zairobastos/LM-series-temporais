@@ -32,8 +32,7 @@ def create_database(db_path: str = './database/database.db') -> None:
 	try:
 		with closing(sqlite3.connect(db_path)) as conn:
 			with closing(conn.cursor()) as cursor:
-				for table in ['etth1', 'etth2']:
-					create_table(cursor, table)
+				create_table(cursor, 'llm4time')
 			conn.commit()
 		print("[SUCCESS] Banco de dados e tabelas criados com sucesso.")
 	except sqlite3.Error as e:

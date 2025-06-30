@@ -30,7 +30,8 @@ class Crud:
 				kwargs.get('rmse'),
 				kwargs.get('total_tokens_resposta'),
 				kwargs.get('total_tokens_prompt'),
-				kwargs.get('total_tokens')
+				kwargs.get('total_tokens'),
+				kwargs.get('base_dados')
 			)
 			self.cursor.execute(
 				f"""
@@ -49,8 +50,9 @@ class Crud:
 					rmse,
 					total_tokens_resposta,
 					total_tokens_prompt,
-					total_tokens
-				) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""", valores_para_inserir
+					total_tokens,
+					base_dados
+				) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""", valores_para_inserir
 			)
 			self.connection.commit()
 			print(f"[INFO] Dados inseridos com sucesso na tabela {table}.")

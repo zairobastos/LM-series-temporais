@@ -63,17 +63,23 @@ class API:
 				str, int, int, float:  Resposta do modelo, quantidade de tokens do prompt, quantidade de tokens da resposta e tempo de execução.
 		"""
 		print(f"[INFO] Usando modelo OpenAI: {self.model}")
-		api_key = os.getenv(f'{self.model}_key')
+
+		key_name = f'{self.model}_key'.replace("-", "_").replace(".", "_")
+		base_url_name = f'{self.model}_base_url'.replace("-", "_").replace(".", "_")
+
+		api_key = os.getenv(key_name)
+		base_url = os.getenv(base_url_name)
 		print(f"[INFO] Usando chave da API: {api_key}")
 
 		client = OpenAI(
-			api_key=api_key
+			api_key=api_key,
+			base_url=base_url
 		)
 
 		try:
 			inicio = time.time()
 			response = client.chat.completions.create(
-				model='gpt-4.1',
+				model=self.model,
 				messages=[{"role": "user", "content": self.prompt}],
 				temperature=self.temperature,
 			)

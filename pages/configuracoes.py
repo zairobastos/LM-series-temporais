@@ -56,24 +56,39 @@ elif st.session_state.modo == "api":
 		help="Digite a chave da API que deseja utilizar.",
 		placeholder="Ex: sk-1234567890abcdef1234567890abcdef1234567890abcdef"
 	)
-	st.markdown("Cadastre seu modelo na API")
 	modelo_api = st.text_input(
 		"Modelo",
 		help="Digite o nome do modelo que deseja utilizar na API.",
 		placeholder="Ex: gpt-3.5-turbo"
 	)
+	base_url = st.text_input(
+		"Base URL",
+		help="Digite o base_url que deseja utilizar na API.",
+		placeholder="Ex: my_base_url"
+	)
+
 	salvar = st.button(
 		"💾 Salvar Configurações",
 		help="Clique para salvar as configurações.",
 		type="primary",
 	)
-	if chave_api and modelo_api and salvar:
+	if chave_api and modelo_api and base_url and salvar:
 		key_name = f'{modelo_api}_key'.replace("-", "_").replace(".", "_")
+		base_url_name = f'{modelo_api}_base_url'.replace("-", "_").replace(".", "_")
 		try:
 			if not os.path.exists(ENV_PATH):
 				with open(ENV_PATH, 'w') as f:
 					f.write("")
+			if not os.path.exists('./database/modelos.txt'):
+				with open('./database/modelos.txt', 'w') as f:
+					f.write("")
+
+			#modelos arquivo
+			with open('./database/modelos.txt', 'a') as f:
+				f.write(f"{modelo_api}\n")
+
 			set_key(ENV_PATH, key_name,chave_api)
+			set_key(ENV_PATH, base_url_name, base_url)
 			st.toast(
 				"Configurações salvas com sucesso! Você pode utilizar a API com o modelo selecionado.",
 				icon="✅"

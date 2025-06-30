@@ -20,14 +20,9 @@ with st.sidebar:
 	lista_datasets = os.listdir('data')
 
 	dataset = st.selectbox('Base de Dados', lista_datasets)
-	modelo = st.selectbox('Modelo', [
-		'gpt_4_1_2025_04_14',
-		'gemini_2_5_pro_preview_06_05',
-		'deepseek-r1-distill-qwen-32b',
-		'deepseek-r1-distill-qwen-14b',
-		'deepseek-r1-distill-llama-8b',
-		'unsloth/deepseek-r1-distill-qwen-1.5b'
-	], index=0, help='Escolha o modelo a ser utilizado. O modelo deepseek-r1-distill-qwen-32b é o mais avançado e pode fornecer melhores resultados, mas também é mais pesado e pode levar mais tempo para gerar respostas.')
+	with open('./database/modelos.txt', 'r') as f:
+		modelos = f.read().splitlines()
+	modelo = st.selectbox('Modelo', modelos, index=0, help='Escolha o modelo a ser utilizado. O modelo deepseek-r1-distill-qwen-32b é o mais avançado e pode fornecer melhores resultados, mas também é mais pesado e pode levar mais tempo para gerar respostas.')
 	temperatura = st.slider(label='Temperatura', min_value=0.0, max_value=1.0, value=0.7, step=0.1, help='A temperatura controla a aleatoriedade da resposta do modelo. Valores mais altos resultam em respostas mais criativas e variados.')
 	st.write('---')
 	st.write(f"#### ⚙️ Configurações do Prompt - {dataset}")
@@ -78,7 +73,6 @@ if confirma:
 		st.toast("Análise gerada com sucesso!", icon="✅")
 	else:
 		st.toast("Erro ao gerar a análise.", icon="🚨")
-	print("tá passando direto pq")
 
 
 else:

@@ -1,9 +1,7 @@
 import streamlit as st
 from datetime import date
-from streamlit_option_menu import option_menu
 import os
-import ast
-import re
+import pandas as pd
 
 #componentes
 from src.view.header import Header
@@ -34,10 +32,16 @@ with st.sidebar:
 	st.write('---')
 	st.write(f"#### ⚙️ Configurações do Prompt - {dataset}")
 		
-	data_min = date(2016, 7, 1)
-	data_max = date(2018, 6, 26)
-	data_inicio = st.date_input(label='Data de início', max_value=data_max, min_value=data_min, value=date(2016, 7, 1))
-	data_fim = st.date_input(label='Data de término', max_value=data_max, min_value=data_min, value=date(2016, 7, 2))
+	
+	df = pd.read_csv(f'data/{dataset}')
+	data_min = pd.to_datetime(df['date']).min().date()
+	data_max = pd.to_datetime(df['date']).max().date()
+
+	valor_default_inicio = data_min
+	valor_default_fim = min(data_min + pd.Timedelta(days=1), data_max)
+
+	data_inicio = st.date_input(label='Data de início', max_value=data_max, min_value=data_min, value=valor_default_inicio)
+	data_fim = st.date_input(label='Data de término', max_value=data_max, min_value=data_min, value=valor_default_fim)
 		
 	periodos = st.slider(label='Períodos', min_value=24, max_value=96, value=24, step=1, help='Número de períodos a serem previstos. Cada período representa 1 hora de previsão.')
 	tipo_prompt = st.radio(label='Prompt', options=['ZERO_SHOT', 'FEW_SHOT', 'COT', 'COT_FEW'], index=0, help='Escolha o tipo de prompt a ser utilizado')

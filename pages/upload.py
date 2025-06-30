@@ -3,7 +3,7 @@ import pandas as pd
 import os
 
 st.write("### Faça o upload do seu arquivo CSV com os dados da série temporal.")
-st.write("O arquivo deve conter uma coluna chamada 'date' com as datas e outra coluna com os valores a serem previstos.")
+st.write("O arquivo deve conter uma coluna do tipo 'date' com as datas e outra coluna com os valores a serem previstos.")
 st.write("Exemplo de formato do arquivo CSV:")
 st.code("""
 date,value
@@ -44,7 +44,7 @@ def configuracao_dataset(dataset, uploaded_file):
 		elif tratamento == "Manter o último":
 			df = df.drop_duplicates(subset="date", keep="last")
 		elif tratamento == "Somar valores duplicados":
-			df = df.groupby("date", as_index=False).sum()
+			df = df.groupby("date", as_index=False)['value'].transform('sum')
 
 		# Salvar
 		file_path = f"data/{uploaded_file.name}"
